@@ -13,7 +13,7 @@ def load_image(url):
         img.thumbnail((600, 480), Image.Resampling.LANCZOS) # адаптируем размер картинки под экран
         return ImageTk.PhotoImage(img)
     except Exception as e:
-        print(f"Some error have happened!")
+        print(f"Some error have happened: {e}")
         return None
 
 
@@ -25,6 +25,10 @@ def set_image():
         label.image = img
 
 
+def exit():
+    window.destroy()
+
+
 window = Tk()
 window.title("Cutie patootie")
 window.geometry("600x520")
@@ -32,8 +36,17 @@ window.geometry("600x520")
 label = Label()
 label.pack()
 
-update_button = Button(text="Get a new one", command=set_image)
-update_button.pack()
+# update_button = Button(text="More cats", command=set_image)
+# update_button.pack()
+
+menu_bar = Menu(window)
+window.config(menu=menu_bar)
+
+file_menu = Menu(menu_bar, tearoff=0)
+menu_bar.add_cascade(label="File", menu=file_menu)
+file_menu.add_command(label="Get photo", command=set_image)
+file_menu.add_separator()
+file_menu.add_command(label="Exit", command=exit)
 
 url = "https://cataas.com/cat"
 
