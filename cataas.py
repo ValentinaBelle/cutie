@@ -10,7 +10,7 @@ def load_image(url):
         response.raise_for_status()
         image_data = BytesIO(response.content)  # кладем в переменную полученную картинку
         img = Image.open(image_data)
-        img.thumbnail((600, 480), Image.Resampling.LANCZOS) # адаптируем размер картинки под экран
+        img.thumbnail((600, 480), Image.Resampling.LANCZOS)  # адаптируем размер картинки под экран
         return ImageTk.PhotoImage(img)
     except Exception as e:
         print(f"Some error have happened: {e}")
@@ -18,7 +18,9 @@ def load_image(url):
 
 
 def open_new_window():
-    img = load_image(url)
+    tag = tag_entry.get()  # получаем данные о tag от пользователя
+    url_tag = f"https://cataas.com/cat/{tag}" if tag else "https://cataas.com/cat" # если tag пустое, то появится рандомная картинка с сайта
+    img = load_image(url_tag)
 
     if img:
         new_window = Toplevel()
@@ -28,6 +30,7 @@ def open_new_window():
         label.pack()
         label.image = img
 
+
 def exit():
     window.destroy()
 
@@ -36,8 +39,11 @@ window = Tk()
 window.title("Cutie patootie")
 window.geometry("600x520")
 
-# update_button = Button(text="More cats", command=set_image)
-# update_button.pack()
+tag_entry = Entry()
+tag_entry.pack()
+
+load_button = Button(text="Get by tag", command=open_new_window)
+load_button.pack()
 
 menu_bar = Menu(window)
 window.config(menu=menu_bar)
@@ -49,7 +55,5 @@ file_menu.add_separator()
 file_menu.add_command(label="Exit", command=exit)
 
 url = "https://cataas.com/cat"
-
-set_image()
 
 window.mainloop()
